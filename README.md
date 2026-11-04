@@ -25,9 +25,8 @@ mise install
 bin/setup --skip-server
 ```
 
-`mise install` installs the pinned Ruby and SQLite versions. `bin/setup` installs
-the application gems and prepares the local database. Run it again after pulling
-changes to update dependencies and apply database migrations.
+`mise install` installs the pinned Ruby and SQLite versions. `bin/setup` installs the application gems and prepares the
+local database. Run it again after pulling changes to update dependencies and apply database migrations.
 
 Start development with:
 
