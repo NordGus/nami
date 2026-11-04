@@ -28,6 +28,7 @@
     </content>
     <orderEntry type="jdk" jdkName="mise: 4.0.9" jdkType="RUBY_SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="drgn-next" />
     <orderEntry type="library" scope="PROVIDED" name="action_text-trix (v2.1.19, mise: 4.0.9) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="actioncable (v8.1.4.1, mise: 4.0.9) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="actionmailbox (v8.1.4.1, mise: 4.0.9) [gem]" level="application" />
@@ -38,6 +39,7 @@
     <orderEntry type="library" scope="PROVIDED" name="activejob (v8.1.4.1, mise: 4.0.9) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="activemodel (v8.1.4.1, mise: 4.0.9) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="activerecord (v8.1.4.1, mise: 4.0.9) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="activerecord-tenanted (v0.9.0, mise: 4.0.9) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="activestorage (v8.1.4.1, mise: 4.0.9) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="activesupport (v8.1.4.1, mise: 4.0.9) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="ast (v2.4.3, mise: 4.0.9) [gem]" level="application" />
@@ -145,7 +147,6 @@
     <orderEntry type="library" scope="PROVIDED" name="websocket-driver (v0.8.2, mise: 4.0.9) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="websocket-extensions (v0.1.5, mise: 4.0.9) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="zeitwerk (v2.8.3, mise: 4.0.9) [gem]" level="application" />
-    <orderEntry type="module" module-name="drgn-next" />
   </component>
   <component name="RModuleSettingsStorage">
     <LOAD_PATH number="0" />

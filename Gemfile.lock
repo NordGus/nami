@@ -56,6 +56,10 @@ GEM
       activemodel (= 8.1.4.1)
       activesupport (= 8.1.4.1)
       timeout (>= 0.4.0)
+    activerecord-tenanted (0.9.0)
+      activerecord (>= 8.1.2.1)
+      railties (>= 8.1.2.1)
+      zeitwerk
     activestorage (8.1.4.1)
       actionpack (= 8.1.4.1)
       activejob (= 8.1.4.1)
@@ -369,6 +373,7 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
+  activerecord-tenanted (>= 0.9.0)
   bootsnap
   brakeman
   bundler-audit
@@ -403,6 +408,7 @@ CHECKSUMS
   activejob (8.1.4.1) sha256=82c4c9311ea1016d5f7f134a0c5f9b6527cad5a6237f5f3f60aa17984ef36229
   activemodel (8.1.4.1) sha256=063caf105372fbc98b2d789e4be23de63ac5c043f7d9330f04e2caddb7012805
   activerecord (8.1.4.1) sha256=bd65599ca0b5d210937f835d42c7aff69d271741c75aab022730be6cbce67e87
+  activerecord-tenanted (0.9.0) sha256=b1256c26dcfda65b20df38aac925b851868d0f5f1b05604cce1a695629b941b5
   activestorage (8.1.4.1) sha256=0f4e2f114f3584723a80a2c089aacc6170e765a0b2c385c9782e26ed78f05c66
   activesupport (8.1.4.1) sha256=16ac4f341ca65c85a1fcdb8ac73f68891aae9e3c4a6f9c3a27daed8b00017ed7
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
