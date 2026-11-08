@@ -7,9 +7,7 @@ class PasswordsController < ApplicationController
   end
 
   def create
-    if (player = Character::Player.includes(:username).find_by(username: { key: params[:username] }))
-      PasswordsMailer.reset(player).deliver_later
-    end
+    Padlock::Password::OnForgottenJob.perform_later(params[:username])
 
     redirect_to new_session_path, notice: "Password reset instructions sent (if user with that email address exists)."
   end
