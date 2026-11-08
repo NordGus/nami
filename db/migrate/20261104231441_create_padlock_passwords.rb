@@ -9,7 +9,6 @@ class CreatePadlockPasswords < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :padlock_passwords, :replaced_by_id
     add_index :padlock_passwords, :expires_at
   end
 end
