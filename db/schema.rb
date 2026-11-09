@@ -20,7 +20,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_04_231641) do
   end
 
   create_table "padlock_passwords", force: :cascade do |t|
-    t.string "key", null: false
+    t.string "key_digest", null: false
     t.integer "holder_id", null: false
     t.integer "replaced_by_id"
     t.datetime "expires_at", null: false
