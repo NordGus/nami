@@ -21,8 +21,8 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     assert_reset_requested("missing-user@example.com")
   end
 
-  test "edit" do
-    get edit_password_path(@password.key_reset_token)
+  test "edit allows resetting a replaceable password" do
+    get edit_password_path(padlock_passwords(:two).key_reset_token)
     assert_response :success
   end
 
@@ -47,7 +47,7 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "edit rejects a replaced password" do
+  test "edit redirects for a replaced password" do
     token = padlock_passwords(:previous).key_reset_token
 
     get edit_password_path(token)

@@ -28,7 +28,7 @@ class PasswordsController < ApplicationController
 
   def set_password_by_token
     @password = Padlock::Password.replaceable.find_by_key_reset_token!(params[:token])
-  rescue ActiveSupport::MessageVerifier::InvalidSignature
+  rescue ActiveSupport::MessageVerifier::InvalidSignature, ActiveRecord::RecordNotFound
     redirect_to new_password_path, alert: "Password reset link is invalid or has expired."
   end
 end
