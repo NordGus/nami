@@ -1,3 +1,3 @@
 class Character < ApplicationRecord
-  has_one :session, dependent: :destroy
+  has_many :sessions, dependent: :destroy
 end

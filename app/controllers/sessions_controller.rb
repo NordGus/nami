@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
 
   def create
     if (padlock_password = Padlock::Password.includes(:username).active.authenticate_by(username: { key: params[:username] }, key: params[:password]))
-      start_new_session_for padlock_password.character
+      start_new_session_for padlock_password.holder
       redirect_to after_authentication_url
     else
       redirect_to new_session_path, alert: "Try another username or password."

@@ -19,4 +19,8 @@ class Padlock::Password < ApplicationRecord
   def self.duration
     3.months
   end
+
+  def replace(_replacement_arguments)
+    fail NotImplementedError
+  end
 end
