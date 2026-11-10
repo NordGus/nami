@@ -1,33 +1,72 @@
 require "test_helper"
 
 class SessionsControllerTest < ActionDispatch::IntegrationTest
-  setup { @user = User.take }
+  setup do
+    @player = character_players(:luffy)
+    @username = padlock_usernames(:one)
+    @password = padlock_passwords(:one)
+  end
 
   test "new" do
     get new_session_path
     assert_response :success
+    assert_select "input[name=username]"
+    assert_select "input[name=password]"
   end
 
-  test "create with valid credentials" do
-    post session_path, params: { email_address: @user.email_address, password: "password" }
+  test "create with valid credentials returns to the protected URL" do
+    delete session_path
+    assert_redirected_to new_session_path
 
-    assert_redirected_to root_path
-    assert cookies[:session_id]
+    assert_difference "Session.count", 1 do
+      post session_path, params: { username: @username.key, password: "password" }
+    end
+
+    assert_redirected_to session_path
+    assert cookies[:session_id].present?
+    assert_equal @player, Session.order(:id).last.character
   end
 
   test "create with invalid credentials" do
-    post session_path, params: { email_address: @user.email_address, password: "wrong" }
+    assert_sign_in_rejected(password: "wrong")
+  end
 
-    assert_redirected_to new_session_path
-    assert_nil cookies[:session_id]
+  test "create with an unknown username" do
+    assert_sign_in_rejected(username: "missing@example.com")
+  end
+
+  test "create with an expired password" do
+    @password.update!(expires_at: 1.second.ago)
+
+    assert_sign_in_rejected
+  end
+
+  test "create with a replaced password" do
+    assert_sign_in_rejected(password: "previous-password")
   end
 
   test "destroy" do
-    sign_in_as(User.take)
+    sign_in_as(@player)
+    session_id = Current.session.id
 
-    delete session_path
+    assert_difference "Session.count", -1 do
+      delete session_path
+    end
 
+    assert_response :see_other
     assert_redirected_to new_session_path
-    assert_empty cookies[:session_id]
+    assert cookies[:session_id].blank?
+    assert_not Session.exists?(session_id)
   end
+
+  private
+    def assert_sign_in_rejected(**credentials)
+      assert_no_difference "Session.count" do
+        post session_path, params: { username: @username.key, password: "password" }.merge(credentials)
+      end
+
+      assert_redirected_to new_session_path
+      assert cookies[:session_id].blank?
+      assert_equal "Try another username or password.", flash[:alert]
+    end
 end
