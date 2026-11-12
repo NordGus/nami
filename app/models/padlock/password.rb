@@ -47,6 +47,11 @@ class Padlock::Password < ApplicationRecord
       update!(replacement_padlock: new_password)
 
       OnReplacedJob.perform_later(self)
+    rescue StandardError => e
+      Rails.logger.debug { e.message }
+      Rails.logger.debug { e.backtrace&.join("\n") }
+
+      raise ActiveRecord::Rollback
     end
 
     new_password

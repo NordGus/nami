@@ -16,13 +16,13 @@ class PasswordsController < ApplicationController
   end
 
   def update
-    replacement_key, replacement_key_confirmation = params.expect(:password, :password_confirmation)
+    replacement_key, replacement_key_confirmation = params.expect(:replacement_key, :replacement_key_confirmation)
     new_password = @password.replace_padlock(replacement_key:, replacement_key_confirmation:)
 
     if new_password.persisted?
       @password.holder.sessions.destroy_all
       redirect_to new_session_path, notice: "Password has been reset."
-    elsif new_password.errors.where(:key, :uniqueness).any?
+    elsif new_password.errors.of_kind?(:key, :taken)
       redirect_to edit_password_path(params[:token]), alert: "Your new password must be different from your previous passwords."
     else
       redirect_to edit_password_path(params[:token]), alert: "Passwords did not match."

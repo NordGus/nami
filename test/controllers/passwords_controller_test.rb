@@ -24,6 +24,8 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
   test "edit allows resetting a replaceable password" do
     get edit_password_path(padlock_passwords(:two).key_reset_token)
     assert_response :success
+    assert_select "input[name=replacement_key]"
+    assert_select "input[name=replacement_key_confirmation]"
   end
 
   test "edit with invalid password reset token" do
@@ -54,43 +56,42 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     assert_invalid_reset_link
   end
 
-  test "update replaces the password and revokes the holder's sessions" do
+  test "successful update redirects to sign in and revokes only the holder's sessions" do
     holder_session = Session.create!(character: @player)
     other_session = Session.create!(character: character_players(:nami))
 
-    assert_difference "Padlock::Password.count", 1 do
-      put password_path(@password.key_reset_token), params: { password: "new", password_confirmation: "new" }
-      assert_redirected_to new_session_path
-    end
+    put password_path(@password.key_reset_token), params: { replacement_key: "new", replacement_key_confirmation: "new" }
 
-    replacement = @password.reload._replacement
-    assert_not_nil replacement
-    assert_equal @player, replacement.holder
-    assert replacement.authenticate_key("new")
+    assert_redirected_to new_session_path
     assert_not Session.exists?(holder_session.id)
     assert Session.exists?(other_session.id)
     assert_equal "Password has been reset.", flash[:notice]
   end
 
-  test "update with non matching passwords preserves the password and sessions" do
+  test "update with non matching passwords redirects with an alert and preserves sessions" do
     token = @password.key_reset_token
     holder_session = Session.create!(character: @player)
 
-    assert_no_difference "Padlock::Password.count" do
-      assert_no_changes -> { @password.reload.attributes } do
-        put password_path(token), params: { password: "no", password_confirmation: "match" }
-      end
-    end
+    put password_path(token), params: { replacement_key: "no", replacement_key_confirmation: "match" }
 
     assert_redirected_to edit_password_path(token)
     assert Session.exists?(holder_session.id)
     assert_equal "Passwords did not match.", flash[:alert]
   end
 
-  test "update with an invalid token does not change passwords" do
-    assert_no_difference "Padlock::Password.count" do
-      put password_path("invalid token"), params: { password: "new", password_confirmation: "new" }
-    end
+  test "update with a reused password redirects with a history alert and preserves sessions" do
+    token = @password.key_reset_token
+    holder_session = Session.create!(character: @player)
+
+    put password_path(token), params: { replacement_key: "previous-password", replacement_key_confirmation: "previous-password" }
+
+    assert_redirected_to edit_password_path(token)
+    assert Session.exists?(holder_session.id)
+    assert_equal "Your new password must be different from your previous passwords.", flash[:alert]
+  end
+
+  test "update with an invalid token redirects to request a new reset link" do
+    put password_path("invalid token"), params: { replacement_key: "new", replacement_key_confirmation: "new" }
 
     assert_invalid_reset_link
   end
